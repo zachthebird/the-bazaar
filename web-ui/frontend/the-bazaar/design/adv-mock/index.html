@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en" class="fonts-loaded">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADV Debate Screen — Pokemon-Battle DMG Mock</title>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Page ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { background: #1a1a2e; }
+
+/* ── DMG Palette + Pixel Font ── */
+:root {
+  --dmg-darkest:  #081820;
+  --dmg-dark:     #346856;
+  --dmg-mid:      #88C070;
+  --dmg-lightest: #E0F8D0;
+  --font-pixel:   'Press Start 2P', 'Courier New', monospace;
+  --sentiment-pct: 50%;
+  --conviction-bear: 82%;
+  --conviction-bull: 78%;
+}
+
+/* ── Device Bezel ── */
+.adv-mock-device {
+  position: relative;
+  max-width: 640px;
+  margin: 40px auto;
+  background: var(--dmg-lightest);
+  border: 16px solid var(--dmg-darkest);
+  border-radius: 4px;
+  padding: 12px;
+  box-shadow:
+    0 0 0 4px var(--dmg-darkest),
+    0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* ── SECTION 1: Status Strip ── */
+.adv-status-strip {
+  height: 40px;
+  background: var(--dmg-dark);
+  border-top: 2px solid var(--dmg-darkest);
+  border-bottom: 2px solid var(--dmg-darkest);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 12px;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  color: var(--dmg-lightest);
+}
+.adv-status-ticker   { text-align: left; text-transform: uppercase; }
+.adv-status-title    { text-align: center; text-transform: uppercase; }
+.adv-status-turn     { text-align: right; white-space: nowrap; }
+
+/* ── BATTLE VIEW: Arena Container ── */
+.adv-battle-arena {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  min-width: 480px;
+  background: var(--dmg-dark);
+  border-left: 4px solid var(--dmg-darkest);
+  border-right: 4px solid var(--dmg-darkest);
+  overflow: hidden;
+}
+
+/* ── BATTLE VIEW: Portrait Frames ── */
+.adv-battle-portrait-bear,
+.adv-battle-portrait-bull {
+  position: absolute;
+  z-index: 2;
+}
+
+.adv-battle-portrait-bear {
+  top: 10px;
+  right: 20px;
+}
+
+.adv-battle-portrait-bull {
+  bottom: 50px;
+  left: 20px;
+}
+
+.adv-battle-frame {
+  border: 12px solid var(--dmg-darkest);
+  outline: 2px solid var(--dmg-mid);
+  outline-offset: -14px;
+  padding: 6px;
+  background: var(--dmg-lightest);
+  box-shadow: 4px 4px 0 var(--dmg-darkest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.adv-battle-frame img {
+  width: 220px;
+  height: 220px;
+  image-rendering: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* ── BATTLE VIEW: Platform Shelves ── */
+.adv-battle-platform {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  height: 10px;
+  background: var(--dmg-darkest);
+  border-top: 2px solid var(--dmg-mid);
+  border-left: 2px solid var(--dmg-darkest);
+  border-right: 2px solid var(--dmg-darkest);
+  z-index: 1;
+}
+
+/* ── BATTLE VIEW: Stat Boxes ── */
+.adv-battle-stats-bear,
+.adv-battle-stats-bull {
+  position: absolute;
+  width: 180px;
+  z-index: 4;
+  background: var(--dmg-dark);
+  border: 3px solid var(--dmg-darkest);
+  box-shadow: 3px 3px 0 var(--dmg-darkest);
+  padding: 8px 10px;
+  font-family: var(--font-pixel);
+  color: var(--dmg-lightest);
+}
+
+.adv-battle-stats-bear {
+  bottom: 15px;
+  right: 20px;
+}
+
+.adv-battle-stats-bull {
+  bottom: 50px;
+  left: 20px;
+}
+
+.adv-battle-stats-name {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 10px;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.adv-battle-stats-name span:first-child {
+  text-transform: uppercase;
+}
+
+.adv-battle-stats-name .adv-battle-stats-allegiance {
+  font-size: 8px;
+  color: var(--dmg-lightest);
+}
+
+.adv-battle-stats-divider {
+  height: 1px;
+  background: var(--dmg-mid);
+  margin-bottom: 6px;
+}
+
+.adv-battle-stats-gauge-label {
+  font-size: 7px;
+  color: var(--dmg-mid);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.adv-battle-stats-gauge {
+  height: 10px;
+  background: var(--dmg-darkest);
+  border: 1px solid var(--dmg-darkest);
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.adv-battle-stats-gauge-fill {
+  height: 100%;
+  width: var(--conviction-pct, 50%);
+  background: var(--dmg-mid);
+  transition: width 0.4s steps(8);
+}
+
+.adv-battle-stats-pct {
+  font-size: 8px;
+  text-align: right;
+}
+
+/* ── BATTLE VIEW: Active Speaker Emphasis ── */
+.adv-battle-active .adv-battle-frame {
+  transform: scale(1.05);
+  opacity: 1;
+  box-shadow:
+    4px 4px 0 var(--dmg-darkest),
+    0 0 12px var(--dmg-lightest);
+  transition:
+    transform 0.35s ease-out,
+    opacity 0.35s ease-out,
+    box-shadow 0.35s ease-out;
+}
+
+.adv-battle-active .adv-battle-frame img {
+  animation: adv-battle-bob 2s ease-in-out infinite;
+}
+
+.adv-battle-idle .adv-battle-frame {
+  opacity: 0.65;
+  transform: scale(0.97);
+  box-shadow: 2px 2px 0 var(--dmg-darkest);
+  transition:
+    opacity 0.35s ease-out,
+    transform 0.35s ease-out,
+    box-shadow 0.35s ease-out;
+}
+
+/* ── BATTLE VIEW: Momentum Bar ── */
+.adv-battle-momentum {
+  /* reuses adv-sentiment-bar below */
+}
+
+/* ── Sentiment / Momentum Bar (reused) ── */
+.adv-sentiment-bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto 16px;
+  padding: 0 4px;
+}
+.adv-sentiment-label {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  color: var(--dmg-darkest);
+  white-space: nowrap;
+}
+.adv-sentiment-track {
+  height: 14px;
+  background: var(--dmg-dark);
+  border: 2px solid var(--dmg-darkest);
+  position: relative;
+  overflow: hidden;
+}
+.adv-sentiment-fill {
+  height: 100%;
+  width: var(--sentiment-pct, 50%);
+  background: linear-gradient(90deg, var(--dmg-dark) 0%, var(--dmg-mid) 100%);
+  position: relative;
+  transition: width 0.4s steps(8);
+}
+.adv-sentiment-track::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent calc(10% - 1px),
+    var(--dmg-darkest) calc(10% - 1px),
+    var(--dmg-darkest) 10%
+  );
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── BATTLE VIEW: Move Flourish ── */
+.adv-battle-move-flourish {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 4px 16px;
+  background: var(--dmg-darkest);
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  color: var(--dmg-lightest);
+  text-align: center;
+  text-transform: uppercase;
+  border: 2px solid var(--dmg-mid);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+  pointer-events: none;
+  line-height: 1.4;
+}
+
+.adv-battle-move-flourish.adv-battle-move-show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Dialogue Box ── */
+.adv-dialogue-box {
+  width: 520px;
+  height: 144px;
+  background: var(--dmg-dark);
+  border: 4px solid var(--dmg-darkest);
+  box-shadow: 4px 4px 0 var(--dmg-darkest), inset 0 0 0 2px var(--dmg-mid);
+  padding: 14px 16px;
+  margin: 0 auto;
+  position: relative;
+  font-family: var(--font-pixel);
+  color: var(--dmg-lightest);
+  box-sizing: border-box;
+}
+.adv-dialogue-speaker {
+  font-size: 10px;
+  line-height: 1;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.adv-dialogue-allegiance {
+  color: var(--dmg-mid);
+  font-size: 9px;
+}
+.adv-dialogue-divider {
+  height: 1px;
+  background: var(--dmg-mid);
+  margin-bottom: 10px;
+}
+.adv-dialogue-body {
+  font-size: 8px;
+  line-height: 1.8;
+  min-height: 72px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.adv-dialogue-cursor {
+  display: inline;
+  animation: adv-cursor-blink 1.06s step-end infinite;
+}
+.adv-dialogue-advance {
+  position: absolute;
+  bottom: 12px;
+  right: 16px;
+  font-size: 10px;
+  animation: adv-blink-slow 1.4s step-end infinite;
+  opacity: 0;
+}
+.adv-dialogue-advance.adv-visible { opacity: 1; }
+
+/* ── SECTION 2: VS Splash ── */
+.adv-vs-splash {
+  background: var(--dmg-dark);
+  border: 4px solid var(--dmg-darkest);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.adv-vs-slots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+.adv-vs-slot {
+  width: 80px;
+  height: 80px;
+  border: 6px solid var(--dmg-darkest);
+  outline: 2px solid var(--dmg-mid);
+  outline-offset: -8px;
+  overflow: hidden;
+}
+.adv-vs-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: auto;
+}
+.adv-vs-divider {
+  font-family: var(--font-pixel);
+  font-size: 16px;
+  color: var(--dmg-lightest);
+  background: var(--dmg-darkest);
+  padding: 6px 14px;
+  letter-spacing: 2px;
+}
+.adv-vs-label {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  color: var(--dmg-mid);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* ── SECTION 3: Verdict Banner ── */
+.adv-verdict-banner {
+  background: var(--dmg-dark);
+  border: 4px solid var(--dmg-darkest);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+.adv-verdict-headline {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  color: var(--dmg-lightest);
+  text-align: center;
+  line-height: 1.5;
+}
+.adv-verdict-ruling {
+  color: var(--dmg-mid);
+}
+.adv-verdict-banner .adv-sentiment-bar {
+  --sentiment-pct: 55%;
+}
+.adv-verdict-prompt {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  color: var(--dmg-mid);
+  animation: adv-blink-slow 2.5s step-end infinite;
+}
+
+/* ── Keyframes ── */
+@keyframes adv-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+@keyframes adv-blink-slow {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+@keyframes adv-battle-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+
+/* ── VS Intro Overlay Keyframes ── */
+@keyframes vs-slide-left {
+  0%   { transform: translateX(-120%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes vs-slide-right {
+  0%   { transform: translateX(120%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes vs-strike {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.3); opacity: 1; }
+  80%  { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+@keyframes vs-wipe {
+  0%   { clip-path: inset(0 0 100% 0); }
+  100% { clip-path: inset(0 0 0 0); }
+}
+@keyframes vs-reveal-battle {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* ── VS Intro Overlay ── */
+.adv-vs-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  background: var(--dmg-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-pixel);
+}
+.adv-vs-overlay-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--dmg-darkest);
+  z-index: 0;
+}
+.adv-vs-overlay .adv-vs-slots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  z-index: 1;
+}
+.adv-vs-slot-left {
+  width: 120px;
+  height: 120px;
+  border: 6px solid var(--dmg-darkest);
+  outline: 2px solid var(--dmg-mid);
+  outline-offset: -8px;
+  overflow: hidden;
+  opacity: 0;
+}
+.adv-vs-slot-right {
+  width: 120px;
+  height: 120px;
+  border: 6px solid var(--dmg-darkest);
+  outline: 2px solid var(--dmg-mid);
+  outline-offset: -8px;
+  overflow: hidden;
+  opacity: 0;
+}
+.adv-vs-slot-left img,
+.adv-vs-slot-right img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: auto;
+}
+.adv-vs-overlay .adv-vs-divider {
+  font-family: var(--font-pixel);
+  font-size: 16px;
+  color: var(--dmg-lightest);
+  background: var(--dmg-darkest);
+  padding: 6px 14px;
+  letter-spacing: 2px;
+  z-index: 1;
+}
+.adv-vs-overlay .adv-vs-label {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  color: var(--dmg-mid);
+  text-transform: uppercase;
+  margin-top: 12px;
+  z-index: 1;
+  min-height: 12px;
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .adv-battle-active .adv-battle-frame img {
+    animation: none;
+  }
+  .adv-battle-active .adv-battle-frame,
+  .adv-battle-idle .adv-battle-frame {
+    transition: none;
+  }
+  .adv-vs-overlay,
+  .adv-vs-slot-left,
+  .adv-vs-slot-right,
+  .adv-vs-overlay .adv-vs-divider {
+    animation: none !important;
+    transition: opacity 150ms ease-in !important;
+  }
+}
+
+/* ── Responsive (< 640px) ── */
+@media (max-width: 640px) {
+  .adv-mock-device {
+    max-width: 100%;
+    margin: 16px 8px;
+    border-width: 8px;
+  }
+  .adv-battle-arena {
+    height: 320px;
+    min-width: 320px;
+  }
+  .adv-battle-frame img {
+    width: 160px;
+    height: 160px;
+  }
+  .adv-battle-portrait-bear {
+    top: 8px;
+    right: 8px;
+  }
+  .adv-battle-portrait-bull {
+    bottom: 38px;
+    left: 8px;
+  }
+  .adv-battle-stats-bear,
+  .adv-battle-stats-bull {
+    width: 130px;
+    font-size: 7px;
+  }
+  .adv-battle-stats-bear {
+    bottom: 30px;
+    right: 8px;
+  }
+  .adv-battle-stats-bull {
+    bottom: 38px;
+    left: 8px;
+  }
+  .adv-battle-stats-name {
+    font-size: 8px;
+  }
+  .adv-battle-stats-gauge-label {
+    font-size: 6px;
+  }
+  .adv-battle-stats-pct {
+    font-size: 7px;
+  }
+  .adv-battle-platform {
+    width: 180px;
+    height: 8px;
+  }
+  .adv-battle-move-flourish {
+    font-size: 7px;
+    padding: 3px 12px;
+  }
+  .adv-dialogue-box {
+    width: 100%;
+    min-height: 120px;
+    height: auto;
+  }
+  .adv-vs-slot {
+    width: 64px;
+    height: 64px;
+  }
+  .adv-vs-slot img {
+    width: 64px;
+    height: 64px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="adv-mock-device">
+
+  <!-- ═══════════════ VS INTRO OVERLAY ═══════════════ -->
+  <div class="adv-vs-overlay" id="vsOverlay">
+    <div class="adv-vs-overlay-bg"></div>
+    <div class="adv-vs-slots">
+      <div class="adv-vs-slot-left" id="vsSlotLeft">
+        <img src="../comic-cast/balthazar-idle.png"
+             alt="Balthazar — Investment Bull Debater"
+             width="120" height="120"
+             decoding="sync">
+      </div>
+      <div class="adv-vs-divider">V S</div>
+      <div class="adv-vs-slot-right" id="vsSlotRight">
+        <img src="../comic-cast/morwen-idle.png"
+             alt="Morwen — Risk Bear Debater"
+             width="120" height="120"
+             decoding="sync">
+      </div>
+    </div>
+    <div class="adv-vs-label" id="vsLabel"></div>
+  </div>
+
+  <!-- ═══════════════ SECTION 1: BATTLE VIEW ═══════════════ -->
+  <section class="adv-hero adv-battle-view">
+
+    <!-- Status Strip (unchanged) -->
+    <div class="adv-status-strip">
+      <span class="adv-status-ticker">AAPL</span>
+      <span class="adv-status-title">THE ROUND TABLE</span>
+      <span class="adv-status-turn" id="turnCounter">TURN 1 / 4 🕯</span>
+    </div>
+
+    <!-- Battle Arena -->
+    <div class="adv-battle-arena">
+
+      <!-- Bear's stat box (upper-left) -->
+      <div class="adv-battle-stats-bear">
+        <div class="adv-battle-stats-name">
+          <span>MORWEN</span>
+          <span class="adv-battle-stats-allegiance">🐻 BEAR</span>
+        </div>
+        <div class="adv-battle-stats-divider"></div>
+        <div class="adv-battle-stats-gauge-label">CONVICTION</div>
+        <div class="adv-battle-stats-gauge">
+          <div class="adv-battle-stats-gauge-fill" style="--conviction-pct: 82%;"></div>
+        </div>
+        <div class="adv-battle-stats-pct">82%</div>
+      </div>
+
+      <!-- Bear's portrait (upper-right) -->
+      <div class="adv-battle-portrait-bear adv-battle-idle" id="bearPortrait">
+        <div class="adv-battle-frame">
+          <img src="../comic-cast/morwen-idle.png"
+               alt="Morwen, the Risk Bear Debater"
+               width="220" height="220"
+               decoding="sync" loading="eager">
+        </div>
+        <div class="adv-battle-platform"></div>
+      </div>
+
+      <!-- Bull's portrait (lower-left) -->
+      <div class="adv-battle-portrait-bull adv-battle-active" id="bullPortrait">
+        <div class="adv-battle-frame">
+          <img src="../comic-cast/balthazar-speaking.png"
+               alt="Balthazar, the Investment Bull Debater"
+               width="220" height="220"
+               decoding="sync" loading="eager">
+        </div>
+        <div class="adv-battle-platform"></div>
+      </div>
+
+      <!-- Bull's stat box (lower-right) -->
+      <div class="adv-battle-stats-bull">
+        <div class="adv-battle-stats-name">
+          <span>BALTHAZAR</span>
+          <span class="adv-battle-stats-allegiance">🐂 BULL</span>
+        </div>
+        <div class="adv-battle-stats-divider"></div>
+        <div class="adv-battle-stats-gauge-label">CONVICTION</div>
+        <div class="adv-battle-stats-gauge">
+          <div class="adv-battle-stats-gauge-fill" style="--conviction-pct: 78%;"></div>
+        </div>
+        <div class="adv-battle-stats-pct">78%</div>
+      </div>
+    </div>
+
+    <!-- Momentum Bar -->
+    <div class="adv-battle-momentum">
+      <div class="adv-sentiment-bar" id="momentumBar">
+        <span class="adv-sentiment-label">🐻 BEAR</span>
+        <div class="adv-sentiment-track">
+          <div class="adv-sentiment-fill" id="momentumFill"></div>
+        </div>
+        <span class="adv-sentiment-label">🐂 BULL</span>
+      </div>
+    </div>
+
+    <!-- Move Flourish -->
+    <div class="adv-battle-move-flourish" id="moveFlourish">
+      ⚡ BALTHAZAR uses GROWTH THESIS!
+    </div>
+
+    <!-- Dialogue Box (battle variant) -->
+    <div class="adv-dialogue-box" id="dialogueBox">
+      <div class="adv-dialogue-speaker" id="dialogueSpeaker">
+        BALTHAZAR <span class="adv-dialogue-allegiance">(Bull)</span>
+      </div>
+      <div class="adv-dialogue-divider"></div>
+      <div class="adv-dialogue-body" id="dialogueBody">
+        <span id="dialogueText"></span><span class="adv-dialogue-cursor" id="dialogueCursor">█</span>
+      </div>
+      <div class="adv-dialogue-advance" id="dialogueAdvance">▼</div>
+    </div>
+
+  </section>
+
+  <!-- ═══════════════ SECTION 3: VERDICT BANNER ═══════════════ -->
+  <section class="adv-verdict-banner">
+    <div class="adv-verdict-headline">
+      THE COUNCIL HAS RULED — <span class="adv-verdict-ruling">HOLD</span>
+    </div>
+    <div class="adv-sentiment-bar">
+      <span class="adv-sentiment-label">🐻 BEAR</span>
+      <div class="adv-sentiment-track">
+        <div class="adv-sentiment-fill"></div>
+      </div>
+      <span class="adv-sentiment-label">BULL 🐂</span>
+    </div>
+    <div class="adv-verdict-prompt">PRESS ▲ TO READ THE CHRONICLE</div>
+  </section>
+
+</div>
+
+<!-- ═══════════════ INLINE JS: Turn-by-turn Pokemon-Battle Engine ═══════════════ -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Turn Data ──
+  var TURNS = [
+    {
+      speaker: 'BALTHAZAR',
+      allegiance: 'Bull',
+      move: 'GROWTH THESIS',
+      momentum: 60,
+      text: "The MACD histogram shows bullish momentum\nbuilding on the 4-hour. RSI confirms the\nbreakout above 60 with rising volume."
+    },
+    {
+      speaker: 'MORWEN',
+      allegiance: 'Bear',
+      move: 'RISK EXPOSURE',
+      momentum: 45,
+      text: "That momentum is a bull trap. Volume\ndivergence on the daily timeframe suggests\ndistribution, not accumulation."
+    },
+    {
+      speaker: 'BALTHAZAR',
+      allegiance: 'Bull',
+      move: 'MOMENTUM SURGE',
+      momentum: 65,
+      text: "Volume follows price, not the other way\naround. The RSI trendline break precedes\nevery major rally this quarter."
+    },
+    {
+      speaker: 'MORWEN',
+      allegiance: 'Bear',
+      move: 'VOLATILITY SPIKE',
+      momentum: 48,
+      text: "RSI above 70 on a declining trend signals\nexhaustion. The stochastic oscillator\nconfirms overbought conditions."
+    }
+  ];
+
+  var CHARS_PER_SEC = 20;          // 50ms per char
+  var INITIAL_DELAY_MS = 400;
+  var ADVANCE_START_DELAY_MS = 800;
+  var MOVE_FLOURISH_DURATION = 1800;
+  var MOVE_FADE_DURATION = 200;
+  var AUTO_ADVANCE_DELAY = 3000;
+
+  // ── State ──
+  var currentTurn = 0;
+  var charIndex = 0;
+  var typing = false;
+  var typewriterDone = false;
+  var typewriterTimer = null;
+  var mainTimer = null;
+
+  // ── DOM References ──
+  var turnCounter    = document.getElementById('turnCounter');
+  var bearPortrait   = document.getElementById('bearPortrait');
+  var bullPortrait   = document.getElementById('bullPortrait');
+  var bearImg        = bearPortrait.querySelector('img');
+  var bullImg        = bullPortrait.querySelector('img');
+  var moveFlourish   = document.getElementById('moveFlourish');
+  var dialogueSpeaker = document.getElementById('dialogueSpeaker');
+  var dialogueText   = document.getElementById('dialogueText');
+  var dialogueCursor = document.getElementById('dialogueCursor');
+  var dialogueAdvance= document.getElementById('dialogueAdvance');
+  var momentumFill   = document.getElementById('momentumFill');
+  var dialogueBox    = document.getElementById('dialogueBox');
+
+  // ── Helpers ──
+  function isBullTurn() {
+    return TURNS[currentTurn].allegiance === 'Bull';
+  }
+
+  function setMomentum(pct) {
+    momentumFill.style.setProperty('--sentiment-pct', pct + '%');
+    // CSS var on fill width uses --sentiment-pct
+    momentumFill.style.width = pct + '%';
+  }
+
+  function updateTurnCounter() {
+    turnCounter.textContent = 'TURN ' + (currentTurn + 1) + ' / ' + TURNS.length + ' 🕯';
+  }
+
+  function setSpeakerEmphasis() {
+    if (isBullTurn()) {
+      // Bull active, Bear idle
+      bullPortrait.classList.remove('adv-battle-idle');
+      bullPortrait.classList.add('adv-battle-active');
+      bearPortrait.classList.remove('adv-battle-active');
+      bearPortrait.classList.add('adv-battle-idle');
+    } else {
+      // Bear active, Bull idle
+      bearPortrait.classList.remove('adv-battle-idle');
+      bearPortrait.classList.add('adv-battle-active');
+      bullPortrait.classList.remove('adv-battle-active');
+      bullPortrait.classList.add('adv-battle-idle');
+    }
+  }
+
+  function swapPortraitSources() {
+    if (isBullTurn()) {
+      bullImg.src = '../comic-cast/balthazar-speaking.png';
+      bearImg.src = '../comic-cast/morwen-idle.png';
+    } else {
+      bearImg.src = '../comic-cast/morwen-speaking.png';
+      bullImg.src = '../comic-cast/balthazar-idle.png';
+    }
+  }
+
+  // ── Typewriter ──
+  function typeChar() {
+    var text = TURNS[currentTurn].text;
+    if (charIndex < text.length) {
+      dialogueText.textContent = text.substring(0, charIndex + 1);
+      charIndex++;
+      typewriterTimer = setTimeout(typeChar, 1000 / CHARS_PER_SEC);
+    } else {
+      finishTyping();
+    }
+  }
+
+  function finishTyping() {
+    typewriterDone = true;
+    typing = false;
+    setTimeout(function() {
+      dialogueCursor.style.display = 'none';
+      dialogueAdvance.classList.add('adv-visible');
+    }, ADVANCE_START_DELAY_MS);
+  }
+
+  function skipTypewriter() {
+    clearTimeout(typewriterTimer);
+    dialogueText.textContent = TURNS[currentTurn].text;
+    charIndex = TURNS[currentTurn].text.length;
+    finishTyping();
+  }
+
+  function resetDialogueBox() {
+    clearTimeout(typewriterTimer);
+    dialogueText.textContent = '';
+    dialogueCursor.style.display = 'inline';
+    dialogueAdvance.classList.remove('adv-visible');
+    charIndex = 0;
+    typing = true;
+    typewriterDone = false;
+  }
+
+  // ── Move Flourish ──
+  function showMoveFlourish() {
+    var turn = TURNS[currentTurn];
+    moveFlourish.textContent = '⚡ ' + turn.speaker + ' uses ' + turn.move + '!';
+    moveFlourish.classList.add('adv-battle-move-show');
+  }
+
+  function hideMoveFlourish() {
+    moveFlourish.classList.remove('adv-battle-move-show');
+  }
+
+  // ── Turn Setup ──
+  function setupTurn() {
+    var turn = TURNS[currentTurn];
+
+    // Update turn counter
+    updateTurnCounter();
+
+    // Update momentum bar
+    setMomentum(turn.momentum);
+
+    // Swap portrait emphasis
+    setSpeakerEmphasis();
+    swapPortraitSources();
+
+    // Update speaker tag
+    dialogueSpeaker.innerHTML = turn.speaker + ' <span class="adv-dialogue-allegiance">(' + turn.allegiance + ')</span>';
+
+    // Reset dialogue
+    resetDialogueBox();
+
+    // Show move flourish, then start typewriter
+    showMoveFlourish();
+    clearTimeout(mainTimer);
+    mainTimer = setTimeout(function() {
+      hideMoveFlourish();
+      mainTimer = setTimeout(function() {
+        typewriterTimer = setTimeout(typeChar, INITIAL_DELAY_MS);
+      }, MOVE_FADE_DURATION + 400);
+    }, MOVE_FLOURISH_DURATION);
+  }
+
+  // ── Advance (click / keypress) ──
+  function advance() {
+    if (typing) {
+      // Skip to end of current typewriter
+      skipTypewriter();
+      return;
+    }
+
+    if (typewriterDone) {
+      // Advance to next turn
+      currentTurn++;
+      if (currentTurn >= TURNS.length) {
+        currentTurn = 0;
+      }
+      setupTurn();
+    }
+  }
+
+  // ── VS Intro Orchestration ──
+  function typewriteText(el, text, msPerChar) {
+    var i = 0;
+    el.textContent = '';
+    function tick() {
+      if (i < text.length) {
+        el.textContent += text.charAt(i);
+        i++;
+        setTimeout(tick, msPerChar);
+      }
+    }
+    tick();
+  }
+
+  function runVSIntro() {
+    var overlay = document.getElementById('vsOverlay');
+    var leftSlot = document.getElementById('vsSlotLeft');
+    var rightSlot = document.getElementById('vsSlotRight');
+    var vsBlock = overlay.querySelector('.adv-vs-divider');
+    var vsLabel = document.getElementById('vsLabel');
+
+    // Phase 1: Fade in from transparent (0–300ms)
+    overlay.style.opacity = '0';
+    overlay.style.transition = 'opacity 200ms ease-in';
+    requestAnimationFrame(function() {
+      overlay.style.opacity = '1';
+    });
+
+    // Phase 2: Slide portraits in (300ms delay)
+    setTimeout(function() {
+      leftSlot.style.animation = 'vs-slide-left 400ms ease-out forwards';
+      leftSlot.style.opacity = '1';
+      rightSlot.style.animation = 'vs-slide-right 400ms ease-out forwards';
+      rightSlot.style.opacity = '1';
+    }, 300);
+
+    // Phase 3: VS strike (800ms)
+    setTimeout(function() {
+      vsBlock.style.animation = 'vs-strike 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+      // Screen flash
+      overlay.style.background = 'var(--dmg-lightest)';
+      setTimeout(function() { overlay.style.background = 'var(--dmg-dark)'; }, 80);
+    }, 800);
+
+    // Phase 4: Typewriter label (1200ms)
+    setTimeout(function() {
+      typewriteText(vsLabel, 'RESEARCH PHASE \u2022 ANALYSTS DEPLOYED', 40);
+    }, 1200);
+
+    // Phase 5-6: Wipe transition → reveal battle (2500ms)
+    setTimeout(function() {
+      overlay.style.animation = 'vs-wipe 700ms ease-in forwards';
+      // After wipe completes, hide overlay, reveal battle
+      setTimeout(function() {
+        overlay.style.display = 'none';
+        var battleView = document.querySelector('.adv-battle-view');
+        if (battleView) {
+          battleView.style.opacity = '0';
+          battleView.style.animation = 'vs-reveal-battle 400ms ease-out forwards';
+          requestAnimationFrame(function() {
+            battleView.style.opacity = '1';
+          });
+        }
+        // Phase 7: Start first turn
+        setupFirstTurn();
+      }, 700);
+    }, 2500);
+  }
+
+  function setupFirstTurn() {
+    setMomentum(TURNS[0].momentum);
+    updateTurnCounter();
+
+    // Start first turn: show move flourish immediately
+    showMoveFlourish();
+    mainTimer = setTimeout(function() {
+      hideMoveFlourish();
+      mainTimer = setTimeout(function() {
+        typing = true;
+        typewriterTimer = setTimeout(typeChar, INITIAL_DELAY_MS);
+      }, MOVE_FADE_DURATION + 400);
+    }, MOVE_FLOURISH_DURATION);
+  }
+
+  // ── Init ──
+  // Kick off VS intro; it calls setupFirstTurn() when done
+  runVSIntro();
+
+  // Click handler
+  dialogueBox.addEventListener('click', function() {
+    advance();
+  });
+
+  // Keyboard handler
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      advance();
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
