@@ -81,11 +81,13 @@ Python · FastAPI · Server-Sent Events · LangGraph (upstream framework) · Rea
 
 ## Evaluation
 
-Honest status: **no formal evaluation yet.** Nothing here measures whether the agents' trading judgments are any good — the public demo is a scripted replay, clearly labeled as such, and no performance numbers are claimed anywhere. The next piece of work is a reproducible eval/backtest harness (fixed historical window, agents vs. a buy-and-hold baseline, hit-rate and cost/latency reported with caveats). Until that exists, treat this as what it is: an orchestration and UX layer over a research framework.
+There's a reproducible eval/backtest harness in [`evals/`](evals/): it runs the agents over a fixed set of past decisions, maps each 5-tier rating to a position, and scores it against the realized forward return — directional hit-rate, signal-weighted return and alpha vs. a buy-and-hold baseline, rating distribution, and cost/latency, all with caveats. The metric math is unit-tested, and a `--mock` mode runs the whole pipeline for free.
+
+Honest status: **the harness exists; I have not published a real run yet.** No performance numbers are claimed anywhere (the public demo is a scripted replay, clearly labeled). [`evals/RESULTS.md`](evals/RESULTS.md) stays a placeholder until a real run fills it — fabricating results would defeat the entire point. The biggest open validity question is point-in-time data: until the framework's data tools are confirmed strictly as-of-date, any results would be **invalid (lookahead bias), not merely noisy** — called out plainly in the eval README. Treat this repo as an orchestration and UX layer over a research framework, now with the scaffolding to measure it honestly.
 
 ## Limitations / what I'd do next
 
-- **No eval harness yet** — see above; it's the top of the list.
+- **Eval harness has no published run yet** — the scaffolding is in `evals/`; the next step is a real run over a pre-registered, unbiased case set, after confirming the data tools are strictly point-in-time.
 - **Prototype-grade frontend** — React via CDN + Babel standalone, no build pipeline or tests; fine for a prototype, not production.
 - **Single-machine job model** — analyses run as in-process threads; restarting the server orphans running jobs. A real deployment wants a job queue and persistence.
 - **Costs real money to run live** — each full analysis makes many LLM calls; the framework supports cheaper providers (DeepSeek, local Ollama) to soften this.

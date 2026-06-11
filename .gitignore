@@ -238,3 +238,6 @@ web-ui/tunnel.sh
 web-ui/start.sh
 web-ui/DEPLOY.md
 *.plist
+
+# eval run artifact (RESULTS.md is the publishable summary)
+evals/results.json
