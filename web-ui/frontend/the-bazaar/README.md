@@ -5,9 +5,9 @@ A character-driven conversational trading interface. Summon your analyst team, w
 ## Quick Start
 
 ```bash
-# Make sure the TradingAgents backend is running first:
-cd /Users/zachb/Desktop/TradingAgents/web-ui
-bash start.sh
+# Make sure the TradingAgents backend is running first
+# (from the repo root; see web-ui/backend/README.md):
+cd web-ui/backend && python main.py
 
 # Then open the prototype:
 open /path/to/the-bazaar/index.html
@@ -69,7 +69,7 @@ the-bazaar/
 To integrate into the existing TradingAgents repo:
 
 ```bash
-cp -r the-bazaar /Users/zachb/Desktop/TradingAgents/web-ui/frontend/the-bazaar/
+cp -r the-bazaar <path-to-TradingAgents-repo>/web-ui/frontend/the-bazaar/
 ```
 
 The existing backend (FastAPI at `web-ui/backend/main.py`) serves this prototype automatically if placed under the static files mount point.
