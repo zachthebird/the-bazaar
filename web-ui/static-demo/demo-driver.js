@@ -66,7 +66,8 @@ window.fetch = function(input, init){
 //    typewriter pace) before the next beat fires.
 // ════════════════════════════════════════════════════════════
 
-var DEMO_DATE = '2026-06-10';
+// Always "today" so the canned replay never reads as stale.
+var DEMO_DATE = new Date().toISOString().slice(0, 10);
 
 function buildSteps(){
   return [

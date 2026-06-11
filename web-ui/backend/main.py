@@ -57,7 +57,7 @@ logger = logging.getLogger("tradingagents.api")
 
 # Resolve the *real* user home, even when running inside a Hermes profile
 # whose HOME is sandboxed to ~/.hermes/profiles/<name>/home/.  Derive it
-# from HERMES_HOME (e.g. /Users/zachb/.hermes/profiles/web-dev-backend).
+# from HERMES_HOME (e.g. $HOME/.hermes/profiles/web-dev-backend).
 _hermes_home = os.environ.get("HERMES_HOME", "")
 if _hermes_home and "/.hermes/profiles/" in _hermes_home:
     _REAL_USER_HOME = Path(_hermes_home.split("/.hermes/profiles/")[0])
