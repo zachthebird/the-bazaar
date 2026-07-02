@@ -2,7 +2,7 @@
 
 Multi-agent trading systems are powerful but opaque: a dozen LLM calls happen and a decision falls out. **The Bazaar** puts a face on every agent in the [TradingAgents](https://github.com/TauricResearch/TradingAgents) framework — summon an analyst team for any ticker, watch the bull and the bear actually argue it out live, and get a verdict you can interrogate. Built for anyone who wants to *see* how a multi-agent pipeline reasons, not just read its final answer.
 
-> **🔴 Live demo:** [static-demo-gules.vercel.app](https://static-demo-gules.vercel.app) — the *Traders of the Round Table* council debate. It replays canned data (no backend, no API keys) so you can feel the UX in ten seconds; the page says so on-screen. Demo source: [`web-ui/static-demo/`](web-ui/static-demo/). When self-hosted with the backend below, the same UI runs real analyses streamed live over SSE.
+> **🔴 Live demo:** [zachbird.com/tradingAgentsGUI](https://zachbird.com/tradingAgentsGUI) — the *Traders of the Round Table* council debate. It replays canned data (no backend, no API keys) so you can feel the UX in ten seconds; the page says so on-screen. Demo source: [`web-ui/static-demo/`](web-ui/static-demo/). When self-hosted with the backend below, the same UI runs real analyses streamed live over SSE.
 
 > This is a public export of my working repository (history squashed; trading run outputs excluded).
 
