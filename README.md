@@ -1,5 +1,8 @@
 # The Bazaar — a character-driven GUI for a multi-agent LLM trading framework
 
+[![CI](https://github.com/zachthebird/the-bazaar/actions/workflows/ci.yml/badge.svg)](https://github.com/zachthebird/the-bazaar/actions/workflows/ci.yml)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+
 Multi-agent trading systems are powerful but opaque: a dozen LLM calls happen and a decision falls out. **The Bazaar** puts a face on every agent in the [TradingAgents](https://github.com/TauricResearch/TradingAgents) framework — summon an analyst team for any ticker, watch the bull and the bear actually argue it out live, and get a verdict you can interrogate. Built for anyone who wants to *see* how a multi-agent pipeline reasons, not just read its final answer.
 
 > **🔴 Live demo:** [zachbird.com/tradingAgentsGUI](https://zachbird.com/tradingAgentsGUI) — the *Traders of the Round Table* council debate. It replays canned data (no backend, no API keys) so you can feel the UX in ten seconds; the page says so on-screen. Demo source: [`web-ui/static-demo/`](web-ui/static-demo/). When self-hosted with the backend below, the same UI runs real analyses streamed live over SSE.
