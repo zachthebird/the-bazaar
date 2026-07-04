@@ -81,6 +81,6 @@ Honest status: **the harness exists; I have not published a real run yet.** No p
 - **Prototype-grade frontend** — React via CDN + Babel standalone, no build pipeline or tests; fine for a prototype, not production.
 - **Single-machine job model** — analyses run as in-process threads; restarting the server orphans running jobs. A real deployment wants a job queue and persistence.
 - **Costs real money to run live** — each full analysis makes many LLM calls; the framework supports cheaper providers (DeepSeek, local Ollama) to soften this.
-- Three names appear in this project's history (TradingAgentsGUI → The Bazaar → Round Table theme); the repo standardizes on **The Bazaar** with Round Table as a visual theme.
+- This project explored several UIs over one backend (a character "Bazaar" / Round Table theme, a Game Boy edition, and this **PC-98 Council Terminal**); the terminal is the one it standardizes on and ships — the others remain in the tree as history.
 
 > Built on [TauricResearch/TradingAgents](https://github.com/TauricResearch/TradingAgents). TradingAgents is designed for research purposes; nothing here is financial, investment, or trading advice.
