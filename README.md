@@ -1,21 +1,21 @@
-# The Bazaar — a character-driven GUI for a multi-agent LLM trading framework
+# Trading Agents — PC-98 Council Terminal
 
-[![CI](https://github.com/zachthebird/the-bazaar/actions/workflows/ci.yml/badge.svg)](https://github.com/zachthebird/the-bazaar/actions/workflows/ci.yml)
+[![CI](https://github.com/zachthebird/council-terminal/actions/workflows/ci.yml/badge.svg)](https://github.com/zachthebird/council-terminal/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
-Multi-agent trading systems are powerful but opaque: a dozen LLM calls happen and a decision falls out. **The Bazaar** puts a face on every agent in the [TradingAgents](https://github.com/TauricResearch/TradingAgents) framework — summon an analyst team for any ticker, watch the bull and the bear actually argue it out live, and get a verdict you can interrogate. Built for anyone who wants to *see* how a multi-agent pipeline reasons, not just read its final answer.
+Multi-agent trading systems are powerful but opaque: a dozen LLM calls happen and a decision falls out. This is a **retro PC-98 anime terminal** for the [TradingAgents](https://github.com/TauricResearch/TradingAgents) framework — summon an eight-agent council for any ticker, watch the analysts report, the bull and the bear argue it out, and the judge rule **BUY / SELL / HOLD**, all streamed live into a CRT-styled terminal you can actually read.
 
-> **🔴 Live demo:** [zachbird.com/tradingAgentsGUI](https://zachbird.com/tradingAgentsGUI) — the *Traders of the Round Table* council debate. It replays canned data (no backend, no API keys) so you can feel the UX in ten seconds; the page says so on-screen. Demo source: [`web-ui/static-demo/`](web-ui/static-demo/). When self-hosted with the backend below, the same UI runs real analyses streamed live over SSE.
+> **🔴 Live demo:** **[zachbird.com/tradingAgentsGUI](https://zachbird.com/tradingAgentsGUI/)** — a genuine recorded council session (AAPL) replayed through the real terminal: no backend, no API keys, clearly labeled on-screen. Self-hosted with the backend below, the same terminal runs live analyses streamed over SSE. Demo source: [`web-ui/static-demo/terminal/`](web-ui/static-demo/terminal/).
 
-> This is a public export of my working repository (history squashed; trading run outputs excluded).
+> Public export of my working repository (history squashed; trading run outputs excluded). Earlier UI experiments — a character-driven "Bazaar" / Round Table theme and a Game Boy edition — still live in the tree, but the PC-98 terminal is the one I ship.
 
 ## What's mine vs. what's upstream
 
 | Layer | Author |
 |---|---|
-| `web-ui/` — FastAPI + SSE backend, **The Bazaar** UI, **Round Table** castle theme, static demo | **me** |
+| `web-ui/` — FastAPI + SSE backend, the **PC-98 Council Terminal** UI, recorded-session demo (plus earlier Bazaar / Round Table / Game Boy skins over the same backend) | **me** |
 | `ui-alternatives/` — three earlier UI concepts (command bridge, agent council, pulse) | **me** |
-| `tradingagents/`, `cli/`, `tests/`, `CHANGELOG.md` — the agent framework itself (v0.2.5) | [TauricResearch/TradingAgents](https://github.com/TauricResearch/TradingAgents) (Apache-2.0) |
+| `tradingagents/`, `cli/`, `tests/`, `CHANGELOG.md` — the agent framework itself | [TauricResearch/TradingAgents](https://github.com/TauricResearch/TradingAgents) (Apache-2.0) |
 
 The interesting engineering problem here was the seam between the two: the upstream pipeline is a synchronous LangGraph generator, and the UI needs live token-by-token progress in a browser.
 
@@ -25,8 +25,8 @@ Each `/analyze` request spawns a worker thread that drives the synchronous LangG
 
 ```mermaid
 flowchart LR
-    subgraph Browser["The Bazaar / Round Table UI (browser)"]
-        UI["React UI — persona chat,<br/>debate hall, verdict ledger"]
+    subgraph Browser["PC-98 Council Terminal (browser)"]
+        UI["terminal UI — testimony pages,<br/>debate, pipeline HUD, verdict"]
     end
     subgraph Backend["FastAPI backend — web-ui/backend (mine)"]
         EP["POST /analyze"] --> TH["worker thread per job"]
@@ -43,20 +43,7 @@ flowchart LR
     SSE -- live events --> UI
 ```
 
-In the framework (upstream's design): four analysts gather evidence by calling market-data tools, bull/bear researchers debate it, a trader drafts the plan, a risk team stress-tests it, and a portfolio-manager agent makes the final call. Each one is a persona in the UI:
-
-| # | Character | Role | Color | Avatar |
-| --- | --- | --- | --- | --- |
-| 1 | Flint | Market Analyst | #8B6B4A | Bull |
-| 2 | Vera | Sentiment Analyst | #C44B4B | Crystal |
-| 3 | Reed | News Analyst | #4B7A9E | Scroll |
-| 4 | Sage | Fundamentals Analyst | #5C8A6F | Chart |
-| 5 | Balthazar | Investment Debater | #D4A030 | Scales |
-| 6 | Morwen | Risk Debater | #7B8B9A | Shield |
-| 7 | Kael | Trader | #C07840 | Runner |
-| 8 | Elder Aldric | Judge | #9B8BAA | Crown |
-
-Design notes for the Bazaar UI live in [`web-ui/frontend/the-bazaar/README.md`](web-ui/frontend/the-bazaar/README.md); the castle theme pack is documented in [`README-castle.md`](web-ui/frontend/the-bazaar/README-castle.md).
+In the framework (upstream's design): four analysts gather evidence by calling market-data tools, bull/bear researchers debate it, a trader drafts the plan, a risk team stress-tests it, and a portfolio-manager agent makes the final call. The terminal seats all eight as a distinct PC-98 anime cast — market, sentiment, news and fundamentals analysts; a bull and a bear researcher; a trader; a risk warden; and the high judge who delivers the verdict — each with its own portrait and speaking frames.
 
 ## Run it
 
@@ -73,10 +60,10 @@ cd web-ui/backend && python main.py
 
 # 3) In a second terminal, serve the frontends (port 8081)
 cd web-ui/frontend && python3 -m http.server 8081
-# open http://localhost:8081/the-bazaar/
+# then open the PC-98 terminal UI in your browser
 ```
 
-The UI talks to `http://localhost:8000` by default; append `?api=http://other-host:8000` to point elsewhere. Backend endpoints, SSE event schema, and optional auth (`TRADINGAGENTS_API_TOKEN`) are documented in [`web-ui/backend/README.md`](web-ui/backend/README.md). To preview the no-backend demo locally, serve `web-ui/static-demo/` the same way.
+The UI talks to `http://localhost:8000` by default; append `?api=http://other-host:8000` to point elsewhere. Backend endpoints, SSE event schema, and optional auth (`TRADINGAGENTS_API_TOKEN`) are documented in [`web-ui/backend/README.md`](web-ui/backend/README.md). To preview the no-backend recorded session locally, serve [`web-ui/static-demo/terminal/`](web-ui/static-demo/terminal/) the same way.
 
 ## Stack
 
